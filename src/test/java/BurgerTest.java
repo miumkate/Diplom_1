@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -90,6 +91,7 @@ public class BurgerTest {
 
     @Test
     public void getReceiptTest(){
+        float expectedPrice = 458F;
         burger.setBuns(bun);
         burger.addIngredient(ingredient);
         burger.addIngredient(ingredient1);
@@ -99,8 +101,9 @@ public class BurgerTest {
         Mockito.when(ingredient.getName()).thenReturn("Сыр чеддер");
         Mockito.when(ingredient1.getType()).thenReturn(IngredientType.SAUCE);
         Mockito.when(ingredient1.getName()).thenReturn("Кетчуп");
-        Mockito.when(burger.getPrice()).thenReturn(458F);
-        assertNotNull(burger.getReceipt());
+        Mockito.when(burger.getPrice()).thenReturn(expectedPrice);
+        assertTrue(burger.getReceipt().contains(String.valueOf((int)expectedPrice)));
+
     }
 
     // негативно Float.MAX_VALUE
