@@ -85,22 +85,49 @@ public class BurgerTest {
     @Test
     public void getReceiptTest(){
         float expectedPrice = 458F;
+        String bunName = "Самая свежая булочка";
+        String cheese = "Сыр чеддер";
+        String ketchup = "Кетчуп";
+
         burger.setBuns(bun);
         burger.addIngredient(ingredient);
         burger.addIngredient(ingredient1);
 
-        Mockito.when(bun.getName()).thenReturn("Самая свежая булочка");
+        Mockito.when(bun.getName()).thenReturn(bunName);
         Mockito.when(ingredient.getType()).thenReturn(IngredientType.FILLING);
-        Mockito.when(ingredient.getName()).thenReturn("Сыр чеддер");
+        Mockito.when(ingredient.getName()).thenReturn(cheese);
         Mockito.when(ingredient1.getType()).thenReturn(IngredientType.SAUCE);
-        Mockito.when(ingredient1.getName()).thenReturn("Кетчуп");
+        Mockito.when(ingredient1.getName()).thenReturn(ketchup);
         Mockito.when(burger.getPrice()).thenReturn(expectedPrice);
-        assertTrue(burger.getReceipt().contains(String.valueOf((int)expectedPrice)));
 
+
+        String[] linesArray = burger.getReceipt().split("\n");
+
+        assertTrue(linesArray[0].contains
+                (String.format("(==== %s ====)",
+                        bunName)));
+
+        assertTrue(linesArray[1].contains
+                (String.format("= %s %s =",
+                        IngredientType.FILLING.toString().toLowerCase(),
+                        cheese)));
+
+        assertTrue(linesArray[2].contains
+                (String.format("= %s %s =",
+                        IngredientType.SAUCE.toString().toLowerCase(),
+                        ketchup)));
+
+        assertTrue(linesArray[3].contains
+                (String.format("(==== %s ====)",
+                        bunName)));
+
+        assertTrue(linesArray[4].contains(""));
+
+
+        assertTrue(linesArray[5].contains
+                (String.format("Price: %f",
+                        expectedPrice)));
     }
-
-    // негативно Float.MAX_VALUE
-    // Ограничения библиотеки. null.Отрицательно. 0
 
     @Test
     public void getPriceTest(){
@@ -111,6 +138,4 @@ public class BurgerTest {
         Mockito.when(ingredient.getPrice()).thenReturn(20F);
         assertTrue(burger.getPrice() > 0,"Прайс должен быть положительным числом");
     }
-
-
 }
